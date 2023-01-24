@@ -16,7 +16,7 @@ public class CategoriesService : ICategorieService
     {
         return await _repository.GetCategoriesAsync();
     }
-/*
+
     public async Task<Categories> AddCategoriesAsync(Categories categories)
     {
         return await _repository.AddCategoriesAsync(categories);
@@ -30,5 +30,10 @@ public class CategoriesService : ICategorieService
     public async Task<Categories> DeleteCategoriesAsync(int id)
     {
         return await _repository.DeleteCategoriesAsync(id);
-    }*/
+    }
+
+    public async Task<Categories> GetCategoriesByIdAsync(int id)
+    {
+        return await _repository.GetCategoriesByIdAsync(id);
+    }
 }

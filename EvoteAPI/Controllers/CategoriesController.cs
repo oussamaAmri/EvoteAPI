@@ -32,7 +32,20 @@ namespace EvoteAPI.Controllers
                 })
             });
         }
-/*
+
+        [HttpGet("Categories/{id}")]
+        public async Task<IActionResult> GetCategoriesByIdAsync(int id)
+        {
+            var categoriesE = await _categorieService.GetCategoriesByIdAsync(id);
+            if(categoriesE == null)
+            {
+                return NotFound();
+            }
+            return Ok(new CategorieResponse
+            {
+                categories = new Categories { Id = categoriesE.Id,CategoryName=categoriesE.CategoryName,CategoryDesc=categoriesE.CategoryDesc}
+            });
+        }
         [HttpPost("Categories")]
         public async Task<IActionResult> AddCategoriesAsync([FromBody] CreateCategoriesRequest createCategoriesRequest)
         {
@@ -48,8 +61,9 @@ namespace EvoteAPI.Controllers
         [HttpPut("Categories/{id}")]
         public async Task<IActionResult> UpdateCategoriesAsync([FromRoute] int id, [FromBody] UpdateCategoriesRequest updateCategoriesRequest)
         {
-            var categorie = new Categories { CategoryName = updateCategoriesRequest.CategoryName,CategoryDesc = updateCategoriesRequest.CategoryDesc};
-            var updateCategorie = await _categorieService.UpdateCategoriesAsync(id, categorie);
+            var categorie = new Categories {CategoryName = updateCategoriesRequest.CategoryName,CategoryDesc=updateCategoriesRequest.CategoryDesc};
+            var updateCategorie = await _categorieService.UpdateCategoriesAsync(id,categorie);
+
             if (updateCategorie == null)
             {
                 return NotFound();
@@ -69,6 +83,6 @@ namespace EvoteAPI.Controllers
             }
 
             return this.Ok(DeleteCategorie);
-        }*/
+        }
     }
 }

@@ -25,44 +25,45 @@ public class CategorieRepository : ICategorieRepository
         }).ToListAsync();
     }
 
-/*    public async Task<Categories> AddCategoriesAsync(Categories categories)
+    public async Task<Categories> GetCategoriesByIdAsync(int id)
     {
-        var categorie = new CategoriesEntities { Id = categories.Id, CategoryName = categories.CategoryName,CategoryDesc=categories.CategoryDesc};
-        _categories.Add(categorie);
-        var a = await Task.FromResult(categorie);
-        return new Categories { Id = categorie.Id, CategoryName = categorie.CategoryName, CategoryDesc = categorie.CategoryDesc};
-    }
-    public async Task<Categories> UpdateCategoriesAsync(int id, Categories categories)
-    {
-        var categorieToUpdate = new CategoriesEntities { CategoryName = categories.CategoryName, CategoryDesc = categories.CategoryDesc };
-        foreach (var c in _categories)
-        {
-            if (c.Id == id)
-            {
-                c.CategoryName = categorieToUpdate.CategoryName;
-                c.CategoryDesc = categorieToUpdate.CategoryDesc;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        var a = await Task.FromResult(categorieToUpdate);
-        return new Categories { Id = categorieToUpdate.Id, CategoryName = categorieToUpdate.CategoryName, CategoryDesc = categorieToUpdate.CategoryDesc };
-    }
-    public async Task<Categories> DeleteCategoriesAsync(int id)
-    {
-        var categorieToDelete = _categories.SingleOrDefault(c => c.Id == id);
-        if (categorieToDelete != null)
-        {
-            _categories.Remove(categorieToDelete);
-        }
-        else
+        var categorie = await _dbContext.Categories.SingleOrDefaultAsync(c => c.Idc == id);
+        if (categorie == null)
         {
             return null;
         }
+        return new Categories { Id = categorie.Idc, CategoryName = categorie.NomC, CategoryDesc = categorie.DescC };
+    }
 
-        var a = await Task.FromResult(categorieToDelete);
-        return new Categories { Id = categorieToDelete.Id, CategoryName = categorieToDelete.CategoryName, CategoryDesc = categorieToDelete.CategoryDesc };
-    }*/
+    public async Task<Categories> AddCategoriesAsync(Categories categories)
+    {
+        var categorie = new CategoryEntities {NomC = categories.CategoryName,DescC=categories.CategoryDesc};
+        var db = _dbContext.Categories.Add(categorie);
+        await _dbContext.SaveChangesAsync();
+        return new Categories { Id = categorie.Idc, CategoryName = categorie.NomC, CategoryDesc = categorie.DescC};
+    }
+    public async Task<Categories> UpdateCategoriesAsync(int id, Categories categories)
+    {
+        var categorie = await _dbContext.Categories.FindAsync(id);
+        var categorieToUpdate = new CategoryEntities { NomC = categories.CategoryName,DescC=categories.CategoryDesc};
+        if (categorie == null)
+        {
+            return null;
+        }
+        categorie.NomC = categorieToUpdate.NomC;
+        categorie.DescC = categorieToUpdate.DescC;
+        await _dbContext.SaveChangesAsync();
+        return new Categories { Id = categorie.Idc, CategoryName = categorie.NomC,CategoryDesc=categorie.DescC};
+    }
+    public async Task<Categories> DeleteCategoriesAsync(int id)
+    {
+        var categorie = await _dbContext.Categories.FindAsync(id);
+        if (categorie == null)
+        {
+            return null;
+        }
+        _dbContext.Categories.Remove(categorie);
+        await _dbContext.SaveChangesAsync();
+        return new Categories { Id = categorie.Idc,CategoryName=categorie.NomC,CategoryDesc=categorie.DescC};
+    }
 }
