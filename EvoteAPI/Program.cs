@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICategorieService, CategoriesService>();
+builder.Services.AddScoped<ITupleCategoryService, TupleCategoryService>();
 
 builder.Services.AddScoped<ICategorieRepository, CategorieRepository>();
 
